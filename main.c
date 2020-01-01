@@ -56,51 +56,55 @@ void convertToXYZ(char *line, FILE *pFile) {
         fprintf(pFile,"%s",line);
     }
 }
-Object *createObject (char *filename){
-    FILE *f = fopen(filename,"r");
-    if(f ==NULL)
+Object *createObject (char *filename) {
+    FILE *f = fopen(filename, "r");
+    if (f == NULL){
         printf("Error thers is problem with the file.");
+        return NULL;
+    }
     int vQuantity = numOfVertexs(f);
     int fQuantity = numOfFaces(f);
     Object *obj = (Object*)malloc(sizeof(Object));
     obj->numberOfVertexes = vQuantity;
     obj->numberOfFaces = fQuantity;
-    obj->faces = (Face*)malloc(sizeof(Face));
-    obj->vertexes = (Vertex*)malloc(sizeof(Vertex));
+    obj->faces = (Face*)malloc(fQuantity*sizeof(Face));
+    obj->vertexes = (Vertex*)malloc(vQuantity*sizeof(Vertex));
     initVertex(obj->vertexes,vQuantity,f);
     initFaces(obj->faces,fQuantity,f);
     return obj;
 }
 
 void initFaces(Face *faces, int quantity, FILE *file) {
-    faces = malloc(quantity*sizeof(Vertex));
+    int *arrVer = faces->vertex;
+    arrVer = (int *)malloc(quantity* sizeof(int));
     char *line =(char *)malloc(sizeof(char));
     size_t len =0;
-    float x,y,z;
-    for (int i = 0; i < quantity; ++i) {
+    int num;
+    int i =0;
+    while (!feof(file)) {
         getline(&line, &len, file);
-        if(line[0] == 'v' && line[1] == ' '){
-            sscanf(line,"%*[^-0123456789]%f%*[^-0123456789]%f%*[^-0123456789]%f", &x,&y,&z);
-            faces[i].x = x;
-            faces[i].y = y;
-            faces[i].z = z;
+        if(line[0] == 'f' && line[1] == ' '){
+//            sscanf(line,"%*[^0123456789]%d%*[^0123456789]%d%*[^0123456789]%d", &x,&y,&z);
+            char *token =
+            i++;
         }
     }
     free(line);
 }
 
 void initVertex(Vertex *vertexes, int quantity,FILE *file) {
-    vertexes = malloc(quantity*sizeof(Vertex));
     char *line =(char *)malloc(sizeof(char));
     size_t len =0;
     float x,y,z;
-    for (int i = 0; i < quantity; ++i) {
+    int i = 0;
+    while (!feof(file)) {
         getline(&line, &len, file);
         if(line[0] == 'v' && line[1] == ' '){
             sscanf(line,"%*[^-0123456789]%f%*[^-0123456789]%f%*[^-0123456789]%f", &x,&y,&z);
             vertexes[i].x = x;
             vertexes[i].y = y;
             vertexes[i].z = z;
+            i++;
         }
     }
     free(line);
