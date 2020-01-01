@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Ben-K/CLionProjects/Assi3/Face.h
+
+/Users/Ben-K/CLionProjects/Assi3/Object.h
+Vertex.h
+/Users/Ben-K/CLionProjects/Assi3/Vertex.h
+Face.h
+/Users/Ben-K/CLionProjects/Assi3/Face.h
+
+/Users/Ben-K/CLionProjects/Assi3/Scene.h
+
+/Users/Ben-K/CLionProjects/Assi3/Vertex.h
+
+/Users/Ben-K/CLionProjects/Assi3/main.c
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+Vertex.h
+/Users/Ben-K/CLionProjects/Assi3/Vertex.h
+Scene.h
+/Users/Ben-K/CLionProjects/Assi3/Scene.h
+Face.h
+/Users/Ben-K/CLionProjects/Assi3/Face.h
+Object.h
+/Users/Ben-K/CLionProjects/Assi3/Object.h
+
