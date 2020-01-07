@@ -6,7 +6,27 @@
 
 #IncludeRegexTransform: 
 
+/Users/Ben-K/CLionProjects/Assi3/Def.h
+
 /Users/Ben-K/CLionProjects/Assi3/Face.h
+
+/Users/Ben-K/CLionProjects/Assi3/InitObject.c
+Object.h
+/Users/Ben-K/CLionProjects/Assi3/Object.h
+
+/Users/Ben-K/CLionProjects/Assi3/List.c
+stdio.h
+-
+stdlib.h
+-
+Def.h
+/Users/Ben-K/CLionProjects/Assi3/Def.h
+List.h
+/Users/Ben-K/CLionProjects/Assi3/List.h
+
+/Users/Ben-K/CLionProjects/Assi3/List.h
+Def.h
+/Users/Ben-K/CLionProjects/Assi3/Def.h
 
 /Users/Ben-K/CLionProjects/Assi3/Object.h
 Vertex.h
@@ -15,6 +35,20 @@ Face.h
 /Users/Ben-K/CLionProjects/Assi3/Face.h
 
 /Users/Ben-K/CLionProjects/Assi3/Scene.h
+Object.h
+/Users/Ben-K/CLionProjects/Assi3/Object.h
+List.h
+/Users/Ben-K/CLionProjects/Assi3/List.h
+
+/Users/Ben-K/CLionProjects/Assi3/SceneCreator.c
+stdarg.h
+-
+InitObject.c
+/Users/Ben-K/CLionProjects/Assi3/InitObject.c
+List.c
+/Users/Ben-K/CLionProjects/Assi3/List.c
+List.h
+/Users/Ben-K/CLionProjects/Assi3/List.h
 
 /Users/Ben-K/CLionProjects/Assi3/Vertex.h
 
@@ -33,4 +67,12 @@ Face.h
 /Users/Ben-K/CLionProjects/Assi3/Face.h
 Object.h
 /Users/Ben-K/CLionProjects/Assi3/Object.h
+transform.c
+/Users/Ben-K/CLionProjects/Assi3/transform.c
+InitObject.c
+/Users/Ben-K/CLionProjects/Assi3/InitObject.c
+SceneCreator.c
+/Users/Ben-K/CLionProjects/Assi3/SceneCreator.c
+
+/Users/Ben-K/CLionProjects/Assi3/transform.c
 

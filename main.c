@@ -5,179 +5,72 @@
 #include "Scene.h"
 #include "Face.h"
 #include "Object.h"
+#include "transform.c"
+#include "InitObject.c"
+#include "SceneCreator.c"
 
-void transformObject(char *originalObjectFileName, char *deformedObjectFileName);
 
-void convertToXYZ(char *line, FILE *pFile);
+void perform(Scene *scene, void *mothod ,char *type ,char *sentence);
 
-Object *createObject (char *filename);
+void printFaces(Object *ptr, void *numberOfTriangularFaces);
 
-int numOfVertexs(FILE *file);
+void printVertexes(Object *ptr, void *numberOfVertexes);
 
-int numOfFaces(FILE *file);
+void getTotalArea (Object *ptr, void *totalAreaOfTriangularFaces);
 
-Scene *createScene(char *fileName, ...);
+void saveScene(Scene *scene, char *fileName, enum FileType type);
 
-void initVertex(Vertex *vertexes,FILE *file);
+Scene * loadScene(char *fileName, enum FileType type);
 
-void initFaces(Face *faces, FILE *file);
 
-int getLen(char *line);
+void freeScene(Scene *scene);
 
 int main() {
-    transformObject("Donald.obj","DeformedDonald.obj");
-    Object *obj = createObject("Donald.obj");
-    return 0;
+    Scene *scene;
+    Scene *scene1, *scene2;
+
+    // Create a Scene of Objects received
+    // from files GoingMerry.obj, Donald.obj, Pony_cartoon.obj
+    scene = createScene("GoingMerry.obj", "Donald.obj", NULL);
+//    createObject("Donald.obj");
+//    // Print out all Vertexes
+//    perform(scene, printVertexes, "INT" ,"The number of vertexes of all objects is");
+//
+//    // Count the number of all Triangular faces of all objects in Scene
+//    perform(scene, printFaces, "INT", "The number of Triangular faces of all objects is");
+//
+//    // Count the total area of all Triangular faces of all objects in Scene
+//    perform(scene, getTotalArea, "DOUBLE", "The total area of Triangular faces of all objects is");
+//
+//    // Save the world to file in Text and in Binary formats
+//    saveScene(scene, "FirstScene.dat", TextFormat);
+//    saveScene(scene, "SecondScene.dat", BinaryFormat);
+//
+//    // Retrieve the saved data
+//    scene1 = loadScene("FirstScene.dat", TextFormat);
+//    scene2 = loadScene("SecondScene.dat", BinaryFormat);
+//
+//    // Check Retrieve the saved data of text format
+//    perform(scene1, printVertexes, "INT" ,"The number of vertexes of all objects is");
+//    perform(scene1, printFaces,"INT", "The number of Triangular faces of all objects is");
+//    perform(scene1, getTotalArea,"DOUBLE", "The total area of Triangular faces of all objects is");
+//    // Check Retrieve the saved data of binary format
+//    perform(scene2, printVertexes,"INT" ,"The number of vertexes of all objects is");
+//    perform(scene2, printFaces,"INT", "The number of Triangular faces of all objects is");
+//    perform(scene2, getTotalArea,"DOUBLE", "The total area of Triangular faces of all objects is");
+//
+//    // Make transformation based on the original object defined in file Donald.obj
+//    transformObject("Donald.obj", "StrangeDonald.obj");
+
+
+//     Free all memory allocated for the Scene
+//    freeScene(scene);
+//    freeScene(scene1);
+//    freeScene(scene2);
+
 }
 
-void transformObject(char *originalObjectFileName, char *deformedObjectFileName){
-    FILE *fOriginal = fopen(originalObjectFileName, "r");
-    FILE *fDeformed = fopen(deformedObjectFileName, "w");
-    if(fDeformed == NULL || fOriginal == NULL){
-        printf("One of the files is not okay, ERROR.");
-    }
-    char *line =(char *)malloc(sizeof(char));
-    size_t len =0;
-    while(!feof(fOriginal)){
-        getline(&line, &len, fOriginal);
-        if(line[0] =='v'){
-            convertToXYZ(line, fDeformed);
-        }else {
-            fprintf(fDeformed, "%s", line);
-        }
-    }
-    fclose(fOriginal);
-    fclose(fDeformed);
-    free(line);
-}
+//Scene *createScene(char *fileName, ...){
+//
+//}
 
-void convertToXYZ(char *line, FILE *pFile) {
-    float x,y,z;
-    sscanf(line,"%*[^-0123456789]%f%*[^-0123456789]%f%*[^-0123456789]%f", &x,&y,&z);
-    if(line[1] == ' '){
-        fprintf(pFile, "v  %.6f %.6f %.6f\n",x*0.3, y,z);
-    }else {
-        fprintf(pFile,"%s",line);
-    }
-}
-Object *createObject (char *filename) {
-    FILE *f = fopen(filename, "r");
-    FILE *f2 = fopen(filename, "r");
-    if (f == NULL){
-        printf("Error there is a problem with the file.");
-        return NULL;
-    }
-    int vQuantity = numOfVertexs(f);
-    int fQuantity = numOfFaces(f2);
-    Object *obj = (Object*)malloc(sizeof(Object));
-    obj->numberOfVertexes = vQuantity;
-    obj->numberOfFaces = fQuantity;
-    obj->faces = (Face*)malloc(fQuantity*sizeof(Face));
-    obj->vertexes = (Vertex*)malloc(vQuantity*sizeof(Vertex));
-    rewind(f);
-    rewind(f2);
-    initVertex(obj->vertexes,f);
-    initFaces(obj->faces,f2);
-
-    return obj;
-}
-
-void initFaces(Face *faces,FILE *file) {
-    char *line =(char *)malloc(sizeof(char));
-    size_t len =0;
-    int num = 0;
-    int i =0;
-    int indexVer = 0;
-    int faceindex = 0;
-    int length = 0;
-    int flag = 0;
-    while (!feof(file)) {
-        getline(&line, &len, file);
-        if(line[0] == 'f' && line[1] == ' '){
-            length = getLen(line);
-            faces[faceindex].vertex = (int *)malloc( length*sizeof(int));
-            char *tempNum = (char*)malloc(length* sizeof(char));
-            for (int j = 0; j < strlen(line); ++j) {
-                if(line[j] == ' '){
-                    flag = 1;
-                }else if(line[j]== '/'){
-                    flag = 0;
-                    i = 0;
-                    sscanf(tempNum,"%d",&num);
-                }else if(flag == 1){
-                    tempNum[i] = line[j];
-                    i++;
-                }
-                if(tempNum[0] != '\0' && flag == 0){
-                    faces[faceindex].vertex[indexVer] = num;
-                    indexVer++;
-                    tempNum[0] = '\0';
-                }
-            }
-            free(tempNum);
-            faces->size = length;
-            indexVer=0;
-            faceindex++;
-        }
-    }
-    free(line);
-}
-
-int getLen(char *line) {
-    char *token = (char *)malloc(4*sizeof(char));
-    int flag = 0;int len = 0;int index = 0;
-    for (int i = 0; i < 8; ++i) {
-        if(line[i] == ' '){
-            flag = 1;
-        }else if(line[i]== '/'){
-            len = strlen(token);
-            break;
-        }else if(flag ==1){
-            token[index] = line[i];
-            index++;
-        }
-    }
-    return len;
-}
-
-void initVertex(Vertex *vertexes,FILE *file) {
-    char *line =(char *)malloc(sizeof(char));
-    size_t len =0;
-    float x,y,z;
-    int i = 0;
-    while (!feof(file)) {
-        getline(&line, &len, file);
-        if(line[0] == 'v' && line[1] == ' '){
-            sscanf(line,"%*[^-0123456789]%f%*[^-0123456789]%f%*[^-0123456789]%f", &x,&y,&z);
-            vertexes[i].x = x;
-            vertexes[i].y = y;
-            vertexes[i].z = z;
-            i++;
-        }
-    }
-    free(line);
-}
-int numOfVertexs(FILE *file){
-    char *line =(char *)malloc(sizeof(char));
-    size_t len =0;
-    int counter=0;
-    while(!feof(file)){
-        getline(&line, &len, file);
-        if(line[0] =='v' && line[1] == ' ')
-            counter++;
-    }
-    free(line);
-    return counter;
-}
-int numOfFaces(FILE *file){
-    char *line =(char *)malloc(sizeof(char));
-    size_t len =0;
-    int counter=0;
-    while(!feof(file)){
-        getline(&line, &len, file);
-        if(line[0] =='f' && line[1] == ' ')
-            counter++;
-    }
-    free(line);
-    return counter;
-}

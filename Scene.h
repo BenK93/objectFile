@@ -5,9 +5,14 @@
 #ifndef ASSI3_SCENE_H
 #define ASSI3_SCENE_H
 
+#include "Object.h"
+struct Node{
+    Object *object;
+    struct Node *next;
+};
 typedef struct {
     // This structure contains a Single Direction Linked List of all objects in the Scene
-
+    struct Node *head;
 } Scene;
 
 enum FileType { TextFormat, BinaryFormat };
