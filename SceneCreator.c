@@ -1,10 +1,9 @@
 #pragma once
 #include <stdarg.h>
 #include "InitObject.c"
-#include "List.c"
-#include "List.h"
+#include "Scene.h"
 
-char* firstFile(const char* fileName);
+// Creating an One way list and returning Scene.
 Scene *createScene(char *fileName, ...){
     va_list files;
     va_start(files,fileName);
@@ -13,25 +12,20 @@ Scene *createScene(char *fileName, ...){
         printf("No space in memory");
         return NULL;
     }
-    char *currentFile = firstFile(fileName);
-    NODE *pointer = &scene->list->head;
+    char *currentFile = fileName;
+    scene->head = (Node*)malloc(sizeof(Node));
+    Node *pointer = (*scene).head;
     while(currentFile != NULL){
-
         Object *currentObj = createObject(currentFile);
-        pointer = L_insert(pointer,currentObj);
+        pointer->object = currentObj;
         currentFile = va_arg(files,char*);
+        if(currentFile == NULL){
+            pointer->next = NULL;
+            break;
+        }
+        pointer->next = (Node *)malloc(sizeof(Node));
+        pointer = pointer->next;
     }
     va_end(files);
-    scene->list->head = *pointer;
     return scene;
-}
-
-char* firstFile(const char* fileName){
-    char *name = (char*)malloc(sizeof(char));
-    int i =0;
-    while(fileName[i] != '\0'){
-        name[i] = fileName[i];
-        i++;
-    }
-    return name;
 }

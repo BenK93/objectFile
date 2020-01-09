@@ -1,6 +1,6 @@
 #pragma once
-
-void convertToXYZ(char *line, FILE *pFile);
+// writing to file and and changing X by multiplying it by 0.3
+void writingToFIle(char *line, FILE *pFile);
 
 void transformObject(char *originalObjectFileName, char *deformedObjectFileName);
 
@@ -15,7 +15,7 @@ void transformObject(char *originalObjectFileName, char *deformedObjectFileName)
     while(!feof(fOriginal)){
         getline(&line, &len, fOriginal);
         if(line[0] =='v'){
-            convertToXYZ(line, fDeformed);
+            writingToFIle(line, fDeformed);
         }else {
             fprintf(fDeformed, "%s", line);
         }
@@ -24,7 +24,7 @@ void transformObject(char *originalObjectFileName, char *deformedObjectFileName)
     fclose(fDeformed);
     free(line);
 }
-void convertToXYZ(char *line, FILE *pFile) {
+void writingToFIle(char *line, FILE *pFile) {
     float x,y,z;
     sscanf(line,"%*[^-0123456789]%f%*[^-0123456789]%f%*[^-0123456789]%f", &x,&y,&z);
     if(line[1] == ' '){

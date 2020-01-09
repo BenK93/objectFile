@@ -1,14 +1,17 @@
 #pragma once
 
 #include "Object.h"
-
+// initializing Faces by getting all Vertexes + calling to a help func getLen for each Face.
 void initFaces(Face *faces,FILE *file);
-//getting number of Vertexes in a Face
+//getting number of Vertexes in each Face for specifying size in memory with malloc.
 int getLen(const char *line);
+// initializing all Vertexes in the file.
 void initVertex(Vertex *vertexes,FILE *file);
+// getting the number of Vertexes in the file for specifying place in memory.
 int numOfVertexs(FILE *file);
+// getting the number of Faces in file for specifying place in memory.
 int numOfFaces(FILE *file);
-
+// Creating Object from the given file.
 Object *createObject (char *filename) {
     FILE *f = fopen(filename, "r");
     FILE *f2 = fopen(filename, "r");
@@ -41,8 +44,9 @@ void initFaces(Face *faces,FILE *file) {
         getline(&line, &len, file);
         if(line[0] == 'f' && line[1] == ' '){
             length = getLen(line);
-            faces[faceIndex].vertex = (int *)malloc( length*sizeof(int));
-            char *tempNum = (char*)malloc(length* sizeof(char));
+            faces[faceIndex].size = length;
+            faces[faceIndex].vertex = (int *)malloc( length*sizeof(int*));
+            char *tempNum = (char*)malloc(length* sizeof(char*));
             for (int j = 0; j < strlen(line); ++j) {
                 if(line[j] == ' '){
                     flag = 1;
@@ -57,11 +61,10 @@ void initFaces(Face *faces,FILE *file) {
                 if(tempNum[0] != '\0' && flag == 0){
                     faces[faceIndex].vertex[indexVer] = num;
                     indexVer++;
-                    tempNum[0] = '\0';
+                    tempNum = (char*)malloc(length* sizeof(char*));
                 }
             }
-            free(tempNum);
-            faces->size = length;
+//            free(tempNum);
             indexVer=0;
             faceIndex++;
         }
@@ -72,16 +75,21 @@ void initFaces(Face *faces,FILE *file) {
 
 int getLen(const char *line) {
     char *token = (char *)malloc(4*sizeof(char));
-    int flag = 0;int len = 0;int index = 0;
+    int flag = 0;int len = 0;int index = 0,numOfSpace = 0;
     for (int i = 0; i < strlen(line); ++i) {
         if(line[i] == ' '){
-            len++;
+            if(numOfSpace == 0) {
+                len++;
+                numOfSpace++;
+            }
             flag = 1;
         }else if(line[i]== '/'){
             flag=0;
+            numOfSpace =0;
         }else if(flag ==1){
             token[index] = line[i];
             index++;
+            numOfSpace =0;
         }
     }
     free(token);

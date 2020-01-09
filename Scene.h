@@ -6,13 +6,14 @@
 #define ASSI3_SCENE_H
 
 #include "Object.h"
-struct Node{
+
+typedef struct Node{
     Object *object;
     struct Node *next;
-};
+}Node;
 typedef struct {
     // This structure contains a Single Direction Linked List of all objects in the Scene
-    struct Node *head;
+    Node *head;
 } Scene;
 
 enum FileType { TextFormat, BinaryFormat };
